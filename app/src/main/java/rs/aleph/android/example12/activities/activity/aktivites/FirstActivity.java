@@ -1,4 +1,4 @@
-package rs.aleph.android.example12.activities;
+package rs.aleph.android.example12.activities.activity.aktivites;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -146,7 +146,21 @@ public class FirstActivity extends Activity {
 		// startActivity method starts an activity
 		startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
+	// Button btn_apples clicked
+	public void showCevapi(View view) {
 
+		Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+		intent.putExtra("position", 0);
+		startActivity(intent);
+	}
+
+	// Button btn_bananas clicked
+	public void showSarma(View view) {
+
+		Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+		intent.putExtra("position", 1);
+		startActivity(intent);
+	}
     // Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned, and any additional data from it.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

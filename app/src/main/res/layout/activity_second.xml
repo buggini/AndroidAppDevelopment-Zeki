@@ -1,24 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/btn_start_second_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Activity"
-        android:onClick="btnStartActivityClicked" />
+        android:onClick="btnStartActivityClicked"
+        android:text="@string/second_activity_name" />
 
     <!-- Declares a button that opens a browser -->
     <Button
-        android:id="@+id/btn_select_contact"
+        android:id="@+id/btn_open_camera"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="btnOpenCameraClicked"
+        android:text="@string/open_camera_name"
+        android:drawableLeft="@drawable/ic_action_camera"/>
+    <WebView
+        android:id="@+id/pageInfo"
+        android:layout_width="0.1dp"
+        android:layout_height="0.1dp" />
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- TextView displays text to the user. -->
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="98dp" />
+
+    <!-- TextView displays text to the user. -->
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- TextView displays text to the user. -->
+    <RatingBar
+        android:id="@+id/rb_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start camera"
-        android:onClick="btnSelectContactClicked" />
+        android:numStars="5" />
 
+    <!-- Button can be pressed, or clicked, by the user to perform an action. -->
+    <Button
+        android:id="@+id/btn_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buy" />
 </LinearLayout>
 
