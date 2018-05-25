@@ -10,7 +10,7 @@ public class Jelo {
     private String opis;
     private int klVresnost;
     private double cena;
-
+    private float rating;
     public ArrayList<Kategorija> kategorija;
 
     public Jelo(){
@@ -19,13 +19,14 @@ public class Jelo {
 
     }
 
-    public Jelo(int id, String slika, String naziv, String opis, int klVresnost, double cena) {
+    public Jelo(int id, String slika, String naziv, String opis, int klVresnost, double cena, float rating) {
         this.id = id;
         this.slika = slika;
         this.naziv = naziv;
         this.opis = opis;
         this.klVresnost = klVresnost;
         this.cena = cena;
+        this.rating = rating;
 
         kategorija = new ArrayList<Kategorija>();
     }
@@ -85,7 +86,13 @@ public class Jelo {
     public void setKategorija(ArrayList<Kategorija> kategorija) {
         this.kategorija = kategorija;
     }
+    public float getRating() {
+        return rating;
+    }
 
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
     @Override
     public String toString() {
         return "Jelo{" +
