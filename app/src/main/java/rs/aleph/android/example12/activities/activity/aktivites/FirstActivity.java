@@ -150,7 +150,7 @@ public class FirstActivity extends Activity {
 	public void showCevapi(View view) {
 
 		Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
-		intent.putExtra("position", 0);
+//		intent.putExtra("position", 0);
 		startActivity(intent);
 	}
 
@@ -158,7 +158,7 @@ public class FirstActivity extends Activity {
 	public void showSarma(View view) {
 
 		Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
-		intent.putExtra("position", 1);
+//		intent.putExtra("position", 1);
 		startActivity(intent);
 	}
     // Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned, and any additional data from it.

@@ -1,9 +1,11 @@
 package rs.aleph.android.example12.activities.activity.aktivites;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -11,7 +13,14 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import rs.aleph.android.example12.R;
 import rs.aleph.android.example12.activities.activity.aktivites.model.Jelo;
@@ -25,8 +34,8 @@ public class SecondActivity extends Activity {
     private static final int CAMERA_REQUEST_CODE = 10;
     private static final int PERMISSIONS_REQUEST_INTERNET = 0;
 
-    Jelo j1 = new Jelo(0,"cevapi.jpg","Cebavi","meso",200, 750);
-    Jelo j2 = new Jelo(1,"sarma.jpg","Sarma","mleveno meso u kupusu",200, 750);
+    Jelo j1 = new Jelo(0,"cevapi.jpg","Cebavi","meso",200, 750, 4.0f);
+    Jelo j2 = new Jelo(1,"sarma.jpg","Sarma","mleveno meso u kupusu",200, 750, 3.5f);
 
 
     Kategorija k1 = new Kategorija(0, "Rostilj");
@@ -37,6 +46,7 @@ public class SecondActivity extends Activity {
 
 
     // onCreate method is a lifecycle method called when he activity is starting
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,29 +67,80 @@ public class SecondActivity extends Activity {
         k2.getSastojici().add(s2);
         s2.setKategorija(k2);
 
+       final Jelo jelo = new Jelo();
+             Kategorija kategorija = new Kategorija();
+             Sastojci sastojci = new Sastojci();
+
+
+;        // Loads an URL into the WebView
+        final int position = getIntent().getIntExtra("position", 0);
+
+        // Finds "tvName" TextView and sets "text" property
+        TextView tvName = (TextView) findViewById(R.id.tv_name);
+        tvName.setText(jelo.getNaziv() +" kategorija: "+ kategorija.getNazivKategorije() +" Sastojic: " +sastojci.getNazivSastojic());
+
+
+
+        // Finds "tvDescription" TextView and sets "text" property
+        TextView tvDescription = (TextView) findViewById(R.id.tv_description);
+        tvDescription.setText(jelo.getOpis());
+
+        TextView kaloriskVr= (TextView) findViewById(R.id.tv_kaloriska_vrednost);
+        kaloriskVr.setText(jelo.getKlVresnost());
+
+        TextView cena= (TextView) findViewById(R.id.tv_cena_hrane);
+        String finales = new Double(jelo.getCena()).toString();
+        cena.setText(finales);
+
+
+        // Finds "rbRating" RatingBar and sets "rating" property
+        RatingBar rbRating = (RatingBar) findViewById(R.id.rb_rating);
+        rbRating.setRating(jelo.getRating());
+                        //fruits[position].getRating()
+
+        // Finds "ivImage" ImageView and sets "imageDrawable" property
+        ImageView ivImage = (ImageView) findViewById(R.id.iv_image);
+        InputStream is = null;
+        try {
+            is = getAssets().open(jelo.getSlika());
+            Drawable drawable = Drawable.createFromStream(is, null);
+            ivImage.setImageDrawable(drawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Finds "btnBuy" Button and sets "onClickListener" listener
+        Button btnBuy = (Button) findViewById(R.id.btn_buy);
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(v.getContext(), "You've bought " + jelo.getNaziv() + "!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
 
         // Shows a toast message (a pop-up message)
         Toast toast = Toast.makeText(getBaseContext(), "SecondActivity.onCreate()", Toast.LENGTH_SHORT);
         toast.show();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-
-            // PERMISSIONS_REQUEST_INTERNET is an app-defined int constant.
-            // The callback method gets the result of the request.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSIONS_REQUEST_INTERNET);
-
-        } else {
-
-            // Loads an URL into the WebView
-            String URL = getIntent().getStringExtra("URL");
-            if (!URL.trim().equalsIgnoreCase("")) {
-                WebView myWebView = (WebView) findViewById(R.id.pageInfo);
-                myWebView.getSettings().setJavaScriptEnabled(true);
-                myWebView.setWebViewClient(new MyWebViewClient());
-                myWebView.loadUrl(URL.trim());
-            }
-
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+//
+//            // PERMISSIONS_REQUEST_INTERNET is an app-defined int constant.
+//            // The callback method gets the result of the request.
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSIONS_REQUEST_INTERNET);
+//
+//        } else {
+//
+//            // Loads an URL into the WebView
+//            String URL = getIntent().getStringExtra("URL");
+//            if (!URL.trim().equalsIgnoreCase("")) {
+//                WebView myWebView = (WebView) findViewById(R.id.pageInfo);
+//                myWebView.getSettings().setJavaScriptEnabled(true);
+//                myWebView.setWebViewClient(new MyWebViewClient());
+//                myWebView.loadUrl(URL.trim());
+//            }
+//
+//        }
 
     }
 
@@ -147,13 +208,13 @@ public class SecondActivity extends Activity {
 //        startActivity(intent);
 //    }
     public void btnOpenCameraClicked (View view) {
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-        }else{
+//        if (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+//        }else{
             invokeCamera();
         }
-    }
+//    }
 
 
     private void invokeCamera() {
@@ -162,53 +223,53 @@ public class SecondActivity extends Activity {
         startActivity(takePictureIntent);
     }
 
-    private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-            return false;
-        }
-    }
+//    private class MyWebViewClient extends WebViewClient {
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//
+//            return false;
+//        }
+//    }
 
     // This method is invoked asynchronously for every call on requestPermissions
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_INTERNET: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission was granted
-
-                    // Loads an URL into the WebView
-                    String URL = getIntent().getStringExtra("URL");
-                    if (!URL.trim().equalsIgnoreCase("")) {
-                        WebView myWebView = (WebView) findViewById(R.id.pageInfo);
-                        myWebView.getSettings().setJavaScriptEnabled(true);
-                        myWebView.setWebViewClient(new MyWebViewClient());
-                        myWebView.loadUrl(URL.trim());
-                    }
-
-                } else {
-
-                    // Permission denied
-                }
-                return;
-            }
-            case CAMERA_REQUEST_CODE:{
-
-                    if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                        invokeCamera();
-                    }else{
-                        Toast.makeText(this, getString(R.string.unable_to_invoke_camera), Toast.LENGTH_LONG).show();
-                    }
-                return;
-
-            }
-            // other 'case' lines to check for other permissions this app might request
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+//        switch (requestCode) {
+//            case PERMISSIONS_REQUEST_INTERNET: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    // Permission was granted
+//
+//                    // Loads an URL into the WebView
+//                    String URL = getIntent().getStringExtra("URL");
+//                    if (!URL.trim().equalsIgnoreCase("")) {
+//                        WebView myWebView = (WebView) findViewById(R.id.pageInfo);
+//                        myWebView.getSettings().setJavaScriptEnabled(true);
+//                        myWebView.setWebViewClient(new MyWebViewClient());
+//                        myWebView.loadUrl(URL.trim());
+//                    }
+//
+//                } else {
+//
+//                    // Permission denied
+//                }
+//                return;
+//            }
+//            case CAMERA_REQUEST_CODE:{
+//
+//                    if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                        invokeCamera();
+//                    }else{
+//                        Toast.makeText(this, getString(R.string.unable_to_invoke_camera), Toast.LENGTH_LONG).show();
+//                    }
+//                return;
+//
+//            }
+//            // other 'case' lines to check for other permissions this app might request
+//     }
+//    }
 
 
 }
